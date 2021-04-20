@@ -108,15 +108,20 @@ require("http").createServer(function(req, res) {
         logger.debug(msg);
         switch (req.method) {
             case "POST":
-                logger.debug(req.body);
-                msg[position].enqueue(req.body);
-                res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
-                res.write(JSON.stringify({
-                    OK: true,
-                    msg: "pushed"
-                }));
-                res.end();
-                logger.info("pushed");
+                let postBody;
+                req.on("data", function(chunk) {
+                    postBody += chunk;
+                });
+                req.on("end", function() {
+                    msg[position].enqueue(postBody);
+                    res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
+                    res.write(JSON.stringify({
+                        OK: true,
+                        msg: "pushed"
+                    }));
+                    res.end();
+                    logger.info("pushed");
+                })
                 break;
             case "GET":
                 res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
