@@ -122,9 +122,10 @@ require("http").createServer(function(req, res) {
                 res.write(JSON.stringify({
                     OK: true,
                     msg: "got",
-                    body: msg[position].dequeue(),
+                    body: msg[position].front(),
                     empty: msg[position].empty()
                 }));
+                msg[position].dequeue();
                 res.end();
                 logger.info("got");
                 break;
