@@ -91,13 +91,13 @@ require("http").createServer(function(req, res) {
     if ((position = misakaKeys[misakaKey]) == undefined) {
         logger.info("misakakey not found");
         res.writeHead(404, {"Content-Type": "application/json;charset=utf-8"});
-        res.write({
+        res.write(JSON.stringify({
             OK: false,
             error: {
                 code: 1,
                 msg: "misakaKey not found"
             }
-        }.toString());
+        }));
         res.end();
     }
     else {
@@ -110,21 +110,21 @@ require("http").createServer(function(req, res) {
             case "POST":
                 msg[position].enqueue(req.body);
                 res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
-                res.write({
+                res.write(JSON.stringify({
                     OK: true,
                     msg: "pushed"
-                }.toString());
+                }));
                 res.end();
                 logger.info("pushed");
                 break;
             case "GET":
                 res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
-                res.write({
+                res.write(JSON.stringify({
                     OK: true,
                     msg: "got",
                     body: msg[position].dequeue(),
                     empty: msg[position].empty()
-                }.toString());
+                }));
                 res.end();
                 logger.info("got");
                 break;
