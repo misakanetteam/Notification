@@ -41,7 +41,7 @@ logger.info("start server");
 require("http").createServer(function(req, res) {
     logger.info("new client");
     let misakaKey = req.headers["misakaKey"];
-    logger.debug(misakaKey);
+    logger.debug(req.headers);
     let position;
     if ((position = misakaKeys[misakaKey]) == undefined) {
         logger.info("misakakey not found");
