@@ -103,7 +103,7 @@ require("http").createServer(function(req, res) {
     else{
         //判断msg中是否有该sister
         if (msg[position] == undefined)
-            msg[position] = Queue();
+            msg[position] = new Queue();
 
         logger.debug(msg);
         switch (req.method) {
