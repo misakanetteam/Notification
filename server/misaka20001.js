@@ -67,7 +67,7 @@ function empty() {
 let logger = require("./libs/logger");
 
 //消息列表
-let msg = new Array();
+let msg = {};
 
 //从本地获取misakaKey
 logger.info("reading misakaKeys");
