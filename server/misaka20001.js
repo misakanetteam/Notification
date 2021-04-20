@@ -97,10 +97,10 @@ require("http").createServer(function(req, res) {
                 code: 1,
                 msg: "misakaKey not found"
             }
-        });
+        }.toString());
         res.end();
     }
-    else{
+    else {
         //判断msg中是否有该sister
         if (msg[position] == undefined)
             msg[position] = new Queue();
@@ -113,7 +113,7 @@ require("http").createServer(function(req, res) {
                 res.write({
                     OK: true,
                     msg: "pushed"
-                });
+                }.toString());
                 res.end();
                 logger.info("pushed");
                 break;
@@ -124,7 +124,7 @@ require("http").createServer(function(req, res) {
                     msg: "got",
                     body: msg[position].dequeue(),
                     empty: msg[position].empty()
-                });
+                }.toString());
                 res.end();
                 logger.info("got");
                 break;
