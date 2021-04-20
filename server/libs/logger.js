@@ -26,7 +26,7 @@ log4js.configure({
   },
      categories: {
 
-        default: {appenders: ["console", "misaka20001Logs"], level: "info"}
+        default: {appenders: ["console", "misaka20001Logs"], level: "debug"}
 
     }
 });

@@ -40,7 +40,8 @@ logger.info("got misakaKeys");
 logger.info("start server");
 require("http").createServer(function(req, res) {
     logger.info("new client");
-    let misakaKey = req.getHeaders.misakaKey;
+    logger.debug(req.getHeaders());
+    let misakaKey = req.getHeaders().misakaKey;
     logger.debug(misakaKey);
     let position;
     if ((position = misakaKeys[misakaKey]) == undefined) {
