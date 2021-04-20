@@ -108,7 +108,7 @@ require("http").createServer(function(req, res) {
         logger.debug(msg);
         switch (req.method) {
             case "POST":
-                let postBody;
+                let postBody = "";
                 req.on("data", function(chunk) {
                     postBody += chunk;
                 });
