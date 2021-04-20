@@ -19,7 +19,6 @@
  */
 
 let logger = require("./libs/logger");
-let Queue = require("./libs/Queue").Queue;
 
 //消息列表
 let msg = new Array();
@@ -58,7 +57,7 @@ require("http").createServer(function(req, res) {
     else{
         //判断msg中是否有该sister
         if (msg[position] == undefined)
-            msg[position] = Queue();
+            msg[position] = new require("./libs/Queue").Queue();
 
         logger.debug(msg);
         switch (req.method) {
