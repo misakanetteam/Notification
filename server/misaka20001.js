@@ -108,7 +108,7 @@ require("http").createServer(function(req, res) {
         logger.debug(msg);
         switch (req.method) {
             case "POST":
-                logging.debug(req.body);
+                logger.debug(req.body);
                 msg[position].enqueue(req.body);
                 res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
                 res.write(JSON.stringify({
