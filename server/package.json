@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/OlddoctorDevTeam/misakaNet/issues"
   },
-  "homepage": "https://github.com/OlddoctorDevTeam/misakaNet#readme"
+  "homepage": "https://github.com/OlddoctorDevTeam/misakaNet#readme",
+  "dependencies": {
+    "log4js": "^6.3.0"
+  }
 }
