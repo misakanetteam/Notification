@@ -116,8 +116,7 @@ require("http").createServer(function(req, res) {
                     msg[position].enqueue(postBody);
                     res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
                     res.write(JSON.stringify({
-                        OK: true,
-                        msg: "pushed"
+                        OK: true
                     }));
                     res.end();
                     logger.info("pushed");
@@ -127,7 +126,6 @@ require("http").createServer(function(req, res) {
                 res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
                 res.write(JSON.stringify({
                     OK: true,
-                    msg: "got",
                     body: msg[position].front(),
                     empty: msg[position].empty()
                 }));
