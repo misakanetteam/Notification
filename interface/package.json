@@ -1,0 +1,22 @@
+{
+  "name": "misakanet.client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "interface.js",
+  "scripts": {
+    "test": "node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OlddoctorDevTeam/misakaNet.git"
+  },
+  "author": "Olddoctor Development Team",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/OlddoctorDevTeam/misakaNet/issues"
+  },
+  "homepage": "https://github.com/OlddoctorDevTeam/misakaNet#readme",
+  "dependencies": {
+    "log4js": "^6.3.0"
+  }
+}

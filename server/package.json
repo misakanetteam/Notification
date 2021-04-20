@@ -1,0 +1,19 @@
+{
+  "name": "misakanet.server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "misaka20001.js",
+  "scripts": {
+    "test": "node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OlddoctorDevTeam/misakaNet.git"
+  },
+  "author": "Olddoctor Development Team",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/OlddoctorDevTeam/misakaNet/issues"
+  },
+  "homepage": "https://github.com/OlddoctorDevTeam/misakaNet#readme"
+}
