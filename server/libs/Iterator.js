@@ -19,14 +19,14 @@
  */
 
 function Iterator(items) {
-    this.i = 0;
-    this.items = items;
-    this.next = function () {
+    i = 0;
+    next = function () {
         return {
-            done: (this.i >= items.length),
-            value: (done ? undefined : this.items[this.i++])
+            done: (i >= items.length),
+            value: (done ? undefined : items[i++])
         }
     }
 }
+
 
 module.exports.Iterator = Iterator;
