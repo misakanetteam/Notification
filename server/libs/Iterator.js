@@ -20,13 +20,13 @@
 
 function Iterator(items) {
     this.i = 0;
+    this.items = items;
     this.next = function () {
         return {
-            done: (i >= items.length),
-            value: (done ? undefined : items[i++])
+            done: (this.i >= items.length),
+            value: (done ? undefined : this.items[this.i++])
         }
     }
 }
-
 
 module.exports.Iterator = Iterator;
