@@ -26,6 +26,11 @@ try {
 
     //从本地获取misakaKey
     logger.info("reading misakaKeys");
+    try {
+        fs.accessSync("/etc/misakaNet/misakaKeys.conf", fs.constants.F_OK | fs.constants.R_OK);
+    } catch(error) {
+        logger.error("misakaKeys do not exist or cannot read. Exiting.");
+    }
     let iterator = require("./libs/Iterator")
                             .Iterator(require("fs").readFileSync("/etc/misakaNet/misakaKeys.conf")
                                     .toString().split('\n')[0].split(' '));
