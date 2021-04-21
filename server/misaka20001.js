@@ -18,8 +18,8 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+let logger = require("./libs/logger");
 try {
-    let logger = require("./libs/logger");
     let Iterator = require("./libs/Iterator").Iterator;
     let Queue = require("./libs/Queue").Queue;
     //消息列表
