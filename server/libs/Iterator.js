@@ -20,10 +20,12 @@
 
 function Iterator(items) {
     i = 0;
-    next = function () {
-        return {
-            done: (i >= items.length),
-            value: (done ? undefined : items[i++])
+    return {
+        next: function () {
+            return {
+                done: (i >= items.length),
+                value: (done ? undefined : items[i++])
+            }
         }
     }
 }
