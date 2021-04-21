@@ -22,8 +22,9 @@ function Iterator(items) {
     i = 0;
     return {
         next: function () {
+            let done = (i >= items.length);
             return {
-                done: (i >= items.length),
+                done: done,
                 value: (done ? undefined : items[i++])
             }
         }
