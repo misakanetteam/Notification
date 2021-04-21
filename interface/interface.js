@@ -51,7 +51,7 @@ if (config.misaka20001position === undefined || config.misakaKey === undefined)
 
 //请求消息
 logger.debug("Reading message");
-let https = require("http");
+let https = require("https");
 
 
 https.get(config.misaka20001position, {

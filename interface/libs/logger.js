@@ -25,7 +25,7 @@ log4js.configure({
         misakaNetInterfaceLogs:{ type: "file", filename: "logs/misakaNetInterface.log", category: "misakaNetInterface" }
     },
     categories: {
-        default: {appenders: ["console", "misakaNetInterfaceLogs"], level: "debug"}
+        default: {appenders: ["console", "misakaNetInterfaceLogs"], level: "info"}
     }
 });
 let logger = log4js.getLogger("misakaNetInterface");
