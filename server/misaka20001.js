@@ -20,15 +20,15 @@
 
 let logger = require("./libs/logger");
 try {
-    let Iterator = require("./libs/Iterator").Iterator;
     let Queue = require("./libs/Queue").Queue;
     //消息列表
     let msg = {};
 
     //从本地获取misakaKey
     logger.info("reading misakaKeys");
-    let iterator = Iterator(require("fs").readFileSync("/etc/misakaNet/misakaKeys.conf")
-                            .toString().split('\n')[0].split(' '));
+    let iterator = require("./libs/Iterator")
+                            .Iterator(require("fs").readFileSync("/etc/misakaNet/misakaKeys.conf")
+                                    .toString().split('\n')[0].split(' '));
     let i;
     let misakaKeys = {};
     while (!(i = iterator.next()).done) {
