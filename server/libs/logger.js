@@ -25,7 +25,7 @@ log4js.configure({
         misaka20001Logs:{ type: "file", filename: "logs/misaka20001.log", category: "misaka20001" }
     },
     categories: {
-        default: {appenders: ["console", "misaka20001Logs"], level: "debug"}
+        default: {appenders: ["console", "misaka20001Logs"], level: "info"}
     }
 });
 let logger = log4js.getLogger("misaka20001");
