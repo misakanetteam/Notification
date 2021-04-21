@@ -43,3 +43,5 @@ function empty() {
         return false;
     }
 }
+
+exports.Queue = Queue;

@@ -20,16 +20,14 @@
 
 let log4js = require("log4js");
 log4js.configure({
-  appenders: {
-    console:{ type: "console" },
-    misaka20001Logs:{ type: "file", filename: "logs/misaka20001.log", category: "misaka20001" }
-  },
-     categories: {
-
+    appenders: {
+        console:{ type: "console" },
+        misaka20001Logs:{ type: "file", filename: "logs/misaka20001.log", category: "misaka20001" }
+    },
+    categories: {
         default: {appenders: ["console", "misaka20001Logs"], level: "debug"}
-
     }
 });
-var logger = log4js.getLogger("misaka20001");
+let logger = log4js.getLogger("misaka20001");
 
 module.exports = logger;

@@ -28,5 +28,4 @@ function Iterator(items) {
     }
 }
 
-
-module.exports.Iterator = Iterator;
+exports.Iterator = Iterator;

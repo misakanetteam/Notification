@@ -28,7 +28,7 @@ try {
     //从本地获取misakaKey
     logger.info("reading misakaKeys");
     let iterator = Iterator(require("fs").readFileSync("/etc/misakaNet/misakaKeys.conf")
-                                .toString().split('\n')[0].split(' '));
+                            .toString().split('\n')[0].split(' '));
     let i;
     let misakaKeys = {};
     while (!(i = iterator.next()).done) {
