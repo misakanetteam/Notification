@@ -1,4 +1,4 @@
-/*  iterator.js
+/*  Iterator.js
  *
  *  Copyright 2021  Olddoctor Development Team
  *
@@ -18,18 +18,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-function createIterator(items) {
-    let i = 0;
-    return {
-        next: function () {
-            let done = (i >= items.length);
-            let value = (done ? undefined : items[i++]);
-            return {
-                done: done,
-                value: value
-            }
+function Iterator(items) {
+    this.i = 0;
+    this.next = function () {
+        return {
+            done: (i >= items.length),
+            value: (done ? undefined : items[i++])
         }
     }
 }
 
-exports.createIterator = createIterator;
+
+module.exports.Iterator = Iterator;

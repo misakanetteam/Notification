@@ -18,125 +18,82 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-//定义Queue
-function Queue() {
-    this.dataStore = [];
-    this.enqueue = enqueue;
-    this.dequeue = dequeue;
-    this.front = front;
-    this.back = back;
-    this.toString = toString;
-    this.empty = empty;
-}
+try {
+    let logger = require("./libs/logger");
+    let Iterator = require("./libs/Iterator").Iterator;
+    let Queue = require("./libs/Queue").Queue;
+    //消息列表
+    let msg = {};
 
-//向队末尾添加一个元素
-function enqueue(element) {
-    this.dataStore.push(element)
-}
-
-//删除队首的元素
-function dequeue() {
-    return this.dataStore.shift();
-}
-
-function front() { //读取队首和队末的元素
-    return this.dataStore[0];
-}
-function back() { ////读取队首和队末的元素
-    return this.dataStore[this.dataStore.length - 1]
-}
-
-//显示队列内的所有元素
-function toString() {
-    var retStr = "";
-    for (var i = 0; i < this.dataStore.length; ++i ) {
-        retStr += this.dataStore[i] + "\n";
+    //从本地获取misakaKey
+    logger.info("reading misakaKeys");
+    let iterator = new Iterator(require("fs").readFileSync("/etc/misakaNet/misakaKeys.conf")
+                                .toString().split('\n')[0].split(' '));
+    let i;
+    let misakaKeys = {};
+    while (!(i = iterator.next()).done) {
+        let split = i.value.split(',');
+        misakaKeys[split[0]] = split[1];
     }
-    return retStr
-}
+    logger.info("got misakaKeys");
 
-//队列是否为空
-function empty() {
-    if (this.dataStore.length == 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
+    logger.info("start server");
+    require("http").createServer(function(req, res) {
+        logger.info("new client");
+        logger.debug(req);
+        let misakaKey = req.headers["misaka-key"];
+        let position;
+        if ((position = misakaKeys[misakaKey]) == undefined) {
+            logger.info("misakakey not found");
+            res.writeHead(404, {"Content-Type": "application/json;charset=utf-8"});
+            res.write(JSON.stringify({
+                OK: false,
+                error: {
+                    code: 1,
+                    msg: "misakaKey not found"
+                }
+            }));
+            res.end();
+        }
+        else {
+            //判断msg中是否有该sister
+            if (msg[position] == undefined)
+                msg[position] = new Queue();
 
-let logger = require("./libs/logger");
-
-//消息列表
-let msg = {};
-
-//从本地获取misakaKey
-logger.info("reading misakaKeys");
-let iterator = require("./libs/iterator")
-                .createIterator(require("fs").readFileSync("/etc/misakaNet/misakaKeys.conf")
-                .toString().split('\n')[0].split(' '));
-let i;
-let misakaKeys = {};
-while (!(i = iterator.next()).done) {
-    let split = i.value.split(',');
-    misakaKeys[split[0]] = split[1];
-}
-logger.info("got misakaKeys");
-
-logger.info("start server");
-require("http").createServer(function(req, res) {
-    logger.info("new client");
-    let misakaKey = req.headers["misaka-key"];
-    logger.debug(req.headers);
-    let position;
-    if ((position = misakaKeys[misakaKey]) == undefined) {
-        logger.info("misakakey not found");
-        res.writeHead(404, {"Content-Type": "application/json;charset=utf-8"});
-        res.write(JSON.stringify({
-            OK: false,
-            error: {
-                code: 1,
-                msg: "misakaKey not found"
-            }
-        }));
-        res.end();
-    }
-    else {
-        //判断msg中是否有该sister
-        if (msg[position] == undefined)
-            msg[position] = new Queue();
-
-        logger.debug(msg);
-        switch (req.method) {
-            case "POST":
-                let postBody = "";
-                req.on("data", function(chunk) {
-                    postBody += chunk;
-                });
-                req.on("end", function() {
-                    msg[position].enqueue(postBody);
+            switch (req.method) {
+                case "POST":
+                    let postBody = "";
+                    req.on("data", function(chunk) {
+                        postBody += chunk;
+                    });
+                    req.on("end", function() {
+                        msg[position].enqueue(postBody);
+                        res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
+                        res.write(JSON.stringify({
+                            OK: true
+                        }));
+                        res.end();
+                        logger.info("pushed");
+                    })
+                    break;
+                case "GET":
                     res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
                     res.write(JSON.stringify({
-                        OK: true
+                        OK: true,
+                        body: msg[position].front(),
+                        empty: msg[position].empty()
                     }));
+                    msg[position].dequeue();
                     res.end();
-                    logger.info("pushed");
-                })
-                break;
-            case "GET":
-                res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
-                res.write(JSON.stringify({
-                    OK: true,
-                    body: msg[position].front(),
-                    empty: msg[position].empty()
-                }));
-                msg[position].dequeue();
-                res.end();
-                logger.info("got");
-                break;
-            default:
-                res.writeHead(404);
-                res.end();
-                break;
+                    logger.info("got");
+                    break;
+                default:
+                    res.writeHead(404);
+                    res.end();
+                    break;
+            }
         }
-    }
-}).listen(20001);
+    }).listen(20001);
+} catch(error) {
+    logger.warn(error);
+}
