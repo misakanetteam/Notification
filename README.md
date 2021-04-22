@@ -4,6 +4,8 @@
 [![GitHub forks](https://img.shields.io/github/forks/OlddoctorDevTeam/misakaNet?style=flat)](https://github.com/OlddoctorDevTeam/misakaNet)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B24811%2Fgithub.com%2FOlddoctorDevTeam%2FmisakaNet.svg?type=shield)](https://app.fossa.com/projects/custom%2B24811%2Fgithub.com%2FOlddoctorDevTeam%2FmisakaNet?ref=badge_shield)
 
+[中文](https://github.com/OlddoctorDevTeam/misakaNet/README_CN.md
+
 This project is just a message receiver. But simplicity is its main feature. 
 
 As a fan of Toaru Majutsu no Index and Toaru Kagaku no Railgun, I named this project miaskaNet.
