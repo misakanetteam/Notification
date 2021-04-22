@@ -21,18 +21,19 @@
 let logger = require("./libs/logger");
 try {
     let Queue = require("./libs/Queue").Queue;
+    let fs = require("fs");
     //消息列表
     let msg = {};
 
     //从本地获取misakaKey
     logger.info("reading misakaKeys");
     try {
-        require("fs").accessSync("/etc/misakaNet/misakaKeys.conf", fs.constants.F_OK | fs.constants.R_OK);
+        fs.accessSync("/etc/misakaNet/misakaKeys.conf", fs.constants.F_OK | fs.constants.R_OK);
     } catch(error) {
         logger.error("misakaKeys do not exist or cannot read. Exiting.");
     }
     let iterator = require("./libs/Iterator")
-                            .Iterator(require("fs").readFileSync("/etc/misakaNet/misakaKeys.conf")
+                            .Iterator(fs.readFileSync("/etc/misakaNet/misakaKeys.conf")
                                     .toString().split('\n')[0].split(' '));
     let i;
     let misakaKeys = {};
