@@ -27,7 +27,7 @@ try {
     //从本地获取misakaKey
     logger.info("reading misakaKeys");
     try {
-        fs.accessSync("/etc/misakaNet/misakaKeys.conf", fs.constants.F_OK | fs.constants.R_OK);
+        require("fs").accessSync("/etc/misakaNet/misakaKeys.conf", fs.constants.F_OK | fs.constants.R_OK);
     } catch(error) {
         logger.error("misakaKeys do not exist or cannot read. Exiting.");
     }
