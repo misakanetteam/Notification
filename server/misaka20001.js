@@ -27,14 +27,15 @@ try {
 
     //从本地获取misakaKey
     logger.info("reading misakaKeys");
+    let iterator;
     try {
         fs.accessSync("/etc/misakaNet/misakaKeys.conf", fs.constants.F_OK | fs.constants.R_OK);
+        iterator = require("./libs/Iterator")
+                    .Iterator(fs.readFileSync("/etc/misakaNet/misakaKeys.conf")
+                                .toString().split('\n')[0].split(' '));
     } catch(error) {
         logger.error("misakaKeys do not exist or cannot read. Exiting.");
     }
-    let iterator = require("./libs/Iterator")
-                            .Iterator(fs.readFileSync("/etc/misakaNet/misakaKeys.conf")
-                                    .toString().split('\n')[0].split(' '));
     let i;
     let misakaKeys = {};
     while (!(i = iterator.next()).done) {
