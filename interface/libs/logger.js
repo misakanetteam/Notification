@@ -19,10 +19,13 @@
  */
 
 let log4js = require("log4js");
+
+const USER_HOME = process.env.HOME || process.env.USERPROFILE;
+
 log4js.configure({
     appenders: {
         console:{ type: "console" },
-        misakaNetInterfaceLogs:{ type: "file", filename: "logs/misakaNetInterface.log", category: "misakaNetInterface" }
+        misakaNetInterfaceLogs:{ type: "file", filename: USER_HOME + "/.logs/misakaNetInterface.log", category: "misakaNetInterface" }
     },
     categories: {
         default: {appenders: ["console", "misakaNetInterfaceLogs"], level: "info"}

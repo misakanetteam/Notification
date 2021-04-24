@@ -19,10 +19,11 @@
  */
 
 let log4js = require("log4js");
+
 log4js.configure({
     appenders: {
         console:{ type: "console" },
-        misaka20001Logs:{ type: "file", filename: "logs/misaka20001.log", category: "misaka20001" }
+        misaka20001Logs:{ type: "file", filename: "/var/log/misaka20001.log", category: "misaka20001" }
     },
     categories: {
         default: {appenders: ["console", "misaka20001Logs"], level: "info"}
