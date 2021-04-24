@@ -68,7 +68,7 @@ https.get(config.misaka20001position, {
         if (!response.empty)
             console.log(response.body);
         else
-            logger.info("No message");
+            console.log("No message");
     });
 }).on("error", function(error) {
     logger.error(error);
