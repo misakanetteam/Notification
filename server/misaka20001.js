@@ -127,5 +127,5 @@ try {
         }
     }).listen(20001);
 } catch(error) {            //捕获所有错误
-    logger.warn(error);
+    logger.error(error);
 }
