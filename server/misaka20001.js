@@ -46,61 +46,86 @@ try {
 
     logger.info("start server");
     require("http").createServer(function(req, res) {
-        logger.info("new client");
-        logger.debug(req);
-        let misakaKey = req.headers["misaka-key"];
-        let position;
-        if ((position = misakaKeys[misakaKey]) == undefined) {
-            logger.info("misakakey not found");
-            res.writeHead(404, {"Content-Type": "application/json;charset=utf-8"});
-            res.write(JSON.stringify({
-                OK: false,
-                error: {
-                    code: 1,
-                    msg: "misakaKey not found"
+        try {
+            logger.info("new client");
+            logger.debug(req);
+            let misakaKey = req.headers["misaka-key"];
+            if (misakaKey === undefined) {      //若没有传入misakaKey
+                res.writeHead(401, {"Content-Type": "application/json;charset=utf-8"});
+                res.write(JSON.stringify({
+                    OK: false,
+                    error: {
+                        code: 0,
+                        msg: "no misakaKey"
+                    }
+                }));
+                res.end();
+            } else {
+                let position;
+                if ((position = misakaKeys[misakaKey]) == undefined) {  //若找不到传入的misakaKey
+                    logger.info("misakaKey not found");
+                    res.writeHead(404, {"Content-Type": "application/json;charset=utf-8"});
+                    res.write(JSON.stringify({
+                        OK: false,
+                        error: {
+                            code: 1,
+                            msg: "misakaKey not found"
+                        }
+                    }));
+                    res.end();
+                } else {
+                    //判断msg中是否有该sister
+                    if (msg[position] == undefined)
+                        msg[position] = new Queue();
+
+                    switch (req.method) {
+                        case "POST":
+                            let postBody = "";
+                            req.on("data", function(chunk) {
+                                postBody += chunk;
+                            });
+                            req.on("end", function() {
+                                msg[position].enqueue(postBody);
+                                res.writeHead(201, {"Content-Type": "application/json;charset=utf-8"});
+                                res.write(JSON.stringify({
+                                    OK: true
+                                }));
+                                res.end();
+                                logger.info("pushed");
+                            })
+                            break;
+                        case "GET":
+                            res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
+                            res.write(JSON.stringify({
+                                OK: true,
+                                body: msg[position].front(),
+                                empty: msg[position].empty()
+                            }));
+                            msg[position].dequeue();
+                            res.end();
+                            logger.info("got");
+                            break;
+                        default:    //不支持的请求方式
+                            res.writeHead(405);
+                            res.write(JSON.stringify({
+                                OK: false,
+                                error: {
+                                    code: 2,
+                                    msg: "unsupported method"
+                                }
+                            }));
+                            res.end();
+                            break;
+                    }
                 }
-            }));
+            }
+        } catch (error) {   //捕获响应请求时的错误
+            error.OK = false;
+            res.writeHead(500, {"Content-Type": "application/json;charset=utf-8"});
+            res.write(JSON.stringify(error));
             res.end();
         }
-        else {
-            //判断msg中是否有该sister
-            if (msg[position] == undefined)
-                msg[position] = new Queue();
-
-            switch (req.method) {
-                case "POST":
-                    let postBody = "";
-                    req.on("data", function(chunk) {
-                        postBody += chunk;
-                    });
-                    req.on("end", function() {
-                        msg[position].enqueue(postBody);
-                        res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
-                        res.write(JSON.stringify({
-                            OK: true
-                        }));
-                        res.end();
-                        logger.info("pushed");
-                    })
-                    break;
-                case "GET":
-                    res.writeHead(200, {"Content-Type": "application/json;charset=utf-8"});
-                    res.write(JSON.stringify({
-                        OK: true,
-                        body: msg[position].front(),
-                        empty: msg[position].empty()
-                    }));
-                    msg[position].dequeue();
-                    res.end();
-                    logger.info("got");
-                    break;
-                default:
-                    res.writeHead(404);
-                    res.end();
-                    break;
-            }
-        }
     }).listen(20001);
-} catch(error) {
+} catch(error) {            //捕获所有错误
     logger.warn(error);
 }
