@@ -65,10 +65,14 @@ https.get(config.misaka20001position, {
     });
     res.on("end", function() {
         response = JSON.parse(response);
-        if (!response.empty)
-            console.log(response.body);
-        else
-            console.log("No message");
+	if (response.OK) {
+            if (!response.empty)
+                console.log(response.body);
+            else
+                console.log("No message");
+        } else {
+            logger.error(response);
+        }
     });
 }).on("error", function(error) {
     logger.error(error);
