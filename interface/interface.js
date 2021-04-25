@@ -49,11 +49,73 @@ try {
 if (config.misaka20001position === undefined || config.misakaKey === undefined)
     logger.error("Missing necessary configs");
 
+//设置缺省配置
+if (config.enablePicture === undefined)
+    config.enablePicture = "false";
+
+if (config.enablePicture === "true") {
+    if (config.pictureSize === undefined)
+        config.pictureSize = 16;
+    else
+        config.pictureSize = parseInt(config.pictureSize);
+}
+
 //请求消息
 logger.debug("Reading message");
 let https = require("https");
 
+//输出信息
+function show(msg) {
+    if (config.enablePicture === "true") {
+        let picShow = require("./libs/picShow");
+        if (picShow.testTycat()) {
 
+            //获取图片URL
+            let regex = /https?:\/\/\S+[jpg,jpeg,png]/g;
+
+            let done = false;
+            let urls = [];
+            for (let i = 0; !done; i++) {
+                let url;
+                if ((url = regex.exec(msg)) !== null) {
+                    urls[i] = url;
+                } else {
+                    done = true;
+                }
+            }
+            let msgWithoutURL = msg.replace(regex, "");
+
+            let execSync = require("child_process").execSync;
+
+            execSync("mkdir /tmp/misakaNet");
+
+            //下载图片
+            try {
+                for (let i = 0; i < urls.length; i++) {
+                    execSync("wget -q -O /tmp/misakaNet/" + i + ".jpg " + urls[i]);
+                }
+            } catch (error) {
+                logger.error("wget error");
+                logger.error(error);
+                process.exit(-1);
+            }
+
+            //显示正文
+            console.log(msgWithoutURL);
+
+            //显示图片
+            for (let i = 0; i < urls.length; i++) {
+                picShow.show("/tmp/misakaNet/" + i + ".jpg", config.pictureSize);
+            }
+        } else {
+            logger.warn("Please check you are using Terminology");
+        }
+    } else {
+        console.log(msg);
+    }
+}
+
+//GET信息
 https.get(config.misaka20001position, {
     headers: {
         "misaka-key": config.misakaKey
@@ -67,7 +129,7 @@ https.get(config.misaka20001position, {
         response = JSON.parse(response);
 	if (response.OK) {
             if (!response.empty)
-                console.log(response.body);
+                show(response.body);
             else
                 console.log("No message");
         } else {
