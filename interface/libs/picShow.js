@@ -18,25 +18,14 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-let execSync = require("child_process").execSync;
 let logger = require("./logger");
 
-function testTycat() {
+function show(pic) {
     try {
-        execSync("tycat 2> /dev/null");
-    } catch (error) {
-        return false;
-    }
-    return true;
-}
-
-function show(pic, size) {
-    try {
-        execSync("tycat -g 8192x" + size + ' ' + pic);
+        require("child_process").execFileSync("/usr/bin/fim", [pic]);
     } catch (error) {
         logger.error(error);
     }
 }
 
-exports.testTycat = testTycat;
 exports.show = show;

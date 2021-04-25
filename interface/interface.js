@@ -53,12 +53,6 @@ if (config.misaka20001position === undefined || config.misakaKey === undefined)
 if (config.enablePicture === undefined)
     config.enablePicture = "false";
 
-if (config.enablePicture === "true") {
-    if (config.pictureSize === undefined)
-        config.pictureSize = 16;
-    else
-        config.pictureSize = parseInt(config.pictureSize);
-}
 
 //请求消息
 logger.debug("Reading message");
@@ -68,47 +62,47 @@ let https = require("https");
 function show(msg) {
     if (config.enablePicture === "true") {
         let picShow = require("./libs/picShow");
-        if (picShow.testTycat()) {
 
-            //获取图片URL
-            let regex = /https?:\/\/\S+[jpg,jpeg,png]/g;
+        //获取图片URL
+        let regex = /https?:\/\/\S+[jpg,jpeg,png]/g;
 
-            let done = false;
-            let urls = [];
-            for (let i = 0; !done; i++) {
-                let url;
-                if ((url = regex.exec(msg)) !== null) {
-                    urls[i] = url;
-                } else {
-                    done = true;
-                }
+        let done = false;
+        let urls = [];
+        for (let i = 0; !done; i++) {
+            let url;
+            if ((url = regex.exec(msg)) !== null) {
+                urls[i] = url;
+            } else {
+                done = true;
             }
-            let msgWithoutURL = msg.replace(regex, "");
+        }
+        let msgWithoutURL = msg.replace(regex, "");
 
-            let execSync = require("child_process").execSync;
+        let execSync = require("child_process").execSync;
 
+        try {
+            fs.accessSync("/tmp/misakaNet", fs.constants.F_OK | fs.constants.W_OK);
+        } catch (error) {
             execSync("mkdir /tmp/misakaNet");
+        }
 
-            //下载图片
-            try {
-                for (let i = 0; i < urls.length; i++) {
-                    execSync("wget -q -O /tmp/misakaNet/" + i + ".jpg " + urls[i]);
-                }
-            } catch (error) {
-                logger.error("wget error");
-                logger.error(error);
-                process.exit(-1);
-            }
-
-            //显示正文
-            console.log(msgWithoutURL);
-
-            //显示图片
+        //下载图片
+        try {
             for (let i = 0; i < urls.length; i++) {
-                picShow.show("/tmp/misakaNet/" + i + ".jpg", config.pictureSize);
+                execSync("wget -q -O /tmp/misakaNet/" + i + ".jpg " + urls[i]);
             }
-        } else {
-            logger.warn("Please check you are using Terminology");
+        } catch (error) {
+            logger.error("wget error");
+            logger.error(error);
+            process.exit(-1);
+        }
+        
+        //显示正文
+        console.log(msgWithoutURL);
+
+        //显示图片
+        for (let i = 0; i < urls.length; i++) {
+            picShow.show("/tmp/misakaNet/" + i + ".jpg");
         }
     } else {
         console.log(msg);
