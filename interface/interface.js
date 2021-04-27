@@ -18,13 +18,11 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 let fs = require("fs");
-let logger = require("./libs/logger");
 
 let config = {};
 
 const USER_HOME = process.env.HOME || process.env.USERPROFILE;
 
-logger.debug("Reading configs");
 //检查配置文件是否存在
 try {
     fs.accessSync(USER_HOME + "/.config/misakaNetInterface.conf", fs.constants.F_OK | fs.constants.R_OK);
@@ -42,12 +40,12 @@ try {
     }
 
 } catch (error) {
-    logger.error("Config does not exist or cannot read.");
+    console.error("Config does not exist or cannot read.");
 }
 
 //检查必要配置是否存在
 if (config.misaka20001position === undefined || config.misakaKey === undefined)
-    logger.error("Missing necessary configs");
+    console.error("Missing necessary configs");
 
 //设置缺省配置
 if (config.enablePicture === undefined)
@@ -55,7 +53,6 @@ if (config.enablePicture === undefined)
 
 
 //请求消息
-logger.debug("Reading message");
 let https = require("https");
 
 //输出信息
@@ -92,8 +89,8 @@ function show(msg) {
                 execSync("wget -q -O /tmp/misakaNet/" + i + ".jpg " + urls[i]);
             }
         } catch (error) {
-            logger.error("wget error");
-            logger.error(error);
+            console.error("wget error");
+            console.error(error);
             process.exit(-1);
         }
         
@@ -127,9 +124,9 @@ https.get(config.misaka20001position, {
             else
                 console.log("No message");
         } else {
-            logger.error(response);
+            console.error(response);
         }
     });
 }).on("error", function(error) {
-    logger.error(error);
+    console.error(error);
 });
