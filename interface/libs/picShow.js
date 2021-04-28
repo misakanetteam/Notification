@@ -18,13 +18,11 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-let logger = require("./logger");
-
 function show(pic) {
     try {
         require("child_process").execFileSync("/usr/bin/fim", [pic]);
     } catch (error) {
-        logger.error(error);
+        console.error(error);
     }
 }
 
