@@ -167,9 +167,6 @@ if(getConfig.headers === undefined)
 
 getConfig.headers["misaka-key"] = config.misakaKey;
 
-console.log(getConfig);
-
-
 https.get(config.misaka20001position, getConfig, function (res) {
     let response = "";
     res.on("data", function(chunk) {
