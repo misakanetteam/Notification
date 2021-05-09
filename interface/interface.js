@@ -20,6 +20,7 @@
 let fs = require("fs");
 let os = require("os");
 let execSync = require("child_process").execSync;
+let strings = require("./res/strings/en");
 
 let config = {};
 
@@ -56,16 +57,10 @@ if (config.enablePicture === undefined)
 if (config.enableLog === undefined)
     config.enableLog = "false";
 
-let strings;
-if (config.language === undefined) {
+try {
+    strings = require("./res/strings/" + config.language);
+} catch (error) {
     strings = require("./res/strings/en");
-}
-else {
-    try {
-        strings = require("./res/strings/" + config.language);
-    } catch (error) {
-        strings = require("./res/strings/en");
-    }
 }
 
 //请求消息
