@@ -20,7 +20,7 @@
 let fs = require("fs");
 let os = require("os");
 let execSync = require("child_process").execSync;
-let strings = require("./res/strings/en");
+let strings = null;
 
 let config = {};
 
@@ -37,13 +37,20 @@ try {
     let i;
     while(!(i = iterator.next()).done) {
         if (i.value !== "" && i.value.charAt(0) !=='#') {
-            let split = i.value.split('=', 2);
+            let split = i.value.split('=');
             config[split[0]] = split[1];
         }
     }
 
 } catch (error) {
     console.error("Config does not exist or cannot read.");
+}
+
+//读取语言设置
+try {
+    strings = require("./res/strings/" + config.language);
+} catch (error) {
+    strings = require("./res/strings/en");
 }
 
 //检查必要配置是否存在
@@ -56,12 +63,6 @@ if (config.enablePicture === undefined)
 
 if (config.enableLog === undefined)
     config.enableLog = "false";
-
-try {
-    strings = require("./res/strings/" + config.language);
-} catch (error) {
-    strings = require("./res/strings/en");
-}
 
 //请求消息
 let https = require("https");
@@ -76,7 +77,7 @@ function show(msg) {
                 let picShow = require("./libs/picShow");
 
                 //获取图片URL
-                let regex = /https?:\/\/\S+[jpg,jpeg,png]/g;
+                let regex = /https?:\/\/\S+[jpg,jpeg,png,gif]/g;
 
                 let done = false;
                 let urls = [];
@@ -152,13 +153,10 @@ function log(msg) {
 }
 
 //GET信息
-let getConfig = {};
+let getConfig = { headers:{} };
 
 if (config.extraGetConfig !== undefined)
     getConfig = JSON.parse(config.extraGetConfig);
-
-if(getConfig.headers === undefined) 
-    getConfig.headers = {};
 
 getConfig.headers["misaka-key"] = config.misakaKey;
 
