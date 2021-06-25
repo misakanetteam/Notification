@@ -14,11 +14,11 @@ Information about how to use is in Wiki.
 
 ## TODO
 ### Interface
-[x] Image Viewer
-[x] Message Logger
+ - [x] Image Viewer
+ - [x] Message Logger
 
 ### Misaka #20001
-[] Viewer in Websites
+ - [ ] Viewer in Websites
 
 ## License
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B24811%2Fgithub.com%2FOlddoctorDevTeam%2FmisakaNet.svg?type=large)](https://app.fossa.com/projects/custom%2B24811%2Fgithub.com%2FOlddoctorDevTeam%2FmisakaNet?ref=badge_large)
